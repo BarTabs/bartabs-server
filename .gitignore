@@ -7,6 +7,5 @@ target/
 *.ear
 *.db
 
-*.classpath
 .settings/
-.project
+/bin/
