@@ -17,6 +17,7 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<mvc:exclude-mapping path="/authenticate/**" />
+			<mvc:exclude-mapping path="/createuser/**" />
 			<bean class="com.bartabs.ws.configuration.interceptor.TokenInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
