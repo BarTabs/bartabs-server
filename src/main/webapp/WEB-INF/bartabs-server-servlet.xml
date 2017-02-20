@@ -25,9 +25,13 @@
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location">
-			<value>file:${catalina.base}/conf/database.properties</value>
+		<property name="locations">
+			<list>
+				<value>file:${catalina.base}/conf/database.properties</value>
+				<value>file:${catalina.base}/conf/auth0.properties</value>
+			</list>
 		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true"/>
 	</bean>
 
 	<bean id="dataSource"
@@ -43,5 +47,10 @@
 		<constructor-arg name="dataSource" ref="dataSource" />
 	</bean>
 
+	<bean id="tokenParam" class="com.bartabs.ws.configuration.model.TokenParams">
+		<property name="issuer" value="${auth0.issuer}" />
+		<property name="audience" value="${auth0.clientId}" />
+		<property name="secretKey" value="${auth0.clientSecret}" />
+	</bean>
 
 </beans>
