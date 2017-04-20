@@ -8,11 +8,13 @@
         http://www.springframework.org/schema/context/spring-context-3.2.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
-
+	<!-- Allows automatic class scanning for various annotations that Spring 
+		uses -->
 	<context:component-scan base-package="com.bartabs.ws" />
-
 	<mvc:annotation-driven />
 
+	<!-- API route intercepter; Actions in TokenInterceptor performed before 
+		any non-excluded route is reached -->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
@@ -24,6 +26,8 @@
 	</mvc:interceptors>
 
 
+	<!-- File defined properties; These files live on a secure service under 
+		the containers conf/ folder -->
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
@@ -35,6 +39,7 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 
+	<!-- The database connection -->
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -43,16 +48,22 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 
+	<!-- The Spring framework helper class that allows query results to be parsed 
+		by named rather than by column number -->
 	<bean name="namedParameterJdbcTemplate"
 		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg name="dataSource" ref="dataSource" />
 	</bean>
 
+	<!-- Transaction manager creates a unit of work every out of a method making 
+		use of the database connection; database commits are only made if all requests 
+		are performed successfully; a roll-back occurs if any single request fails -->
 	<bean id="txManager" name="datasourceTxManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
+	<!-- TokenParam bean definition, used by the JsonWebTokens (JWT) token encoder/decoder -->
 	<bean id="tokenParam"
 		class="com.bartabs.ws.authenticate.configuration.model.TokenParams">
 		<property name="issuer" value="${auth0.issuer}" />
